@@ -1,4 +1,5 @@
 using EFCoreApp_DataAccess.Data;
+using EFCoreApp_Model.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace EFCoreApp
 {
-    public class Startup 
+    public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -28,9 +29,12 @@ namespace EFCoreApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetSection("ApplicationSecrets:DbConnectionString").Value);
             });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
